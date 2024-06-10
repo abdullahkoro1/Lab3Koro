@@ -1,0 +1,60 @@
+/**
+ * Project: Space Game - Systems Integration
+ * Purpose Details: Game B JSON Receiver
+ * Course: IST 242
+ * Author: Abdullah Koro
+ * Date Developed: 6/3/24
+ * Last Date Changed: 6/9/24
+ * Revision: 1
+ */
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * Represents the GameBJSONReceiver class that receives game data as JSON over a network socket
+ */
+
+public class GameBJSONReceiver
+
+{
+
+    /**
+     * Main method to execute the GameBJSONReceiver application
+     *
+     */
+    public static void main(String[] args)
+    {
+        try (ServerSocket serverSocket = new ServerSocket(8080))
+        {
+            System.out.println("Listening on port 8080...");
+            while (true)
+
+            {
+                try (Socket clientSocket = serverSocket.accept();
+
+                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
+
+                    StringBuilder jsonInput = new StringBuilder();
+
+                    String line;
+                    while ((line = in.readLine()) != null)
+
+                    {
+                        jsonInput.append(line);
+                    }
+
+                    // Convert JSON input to GameObject object using ObjectMapper
+                    ObjectMapper mapper = new ObjectMapper();
+                    GameObject gameObject = mapper.readValue(jsonInput.toString(), GameObject.class);
+                    System.out.println("Received GameObject: " + gameObject);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
