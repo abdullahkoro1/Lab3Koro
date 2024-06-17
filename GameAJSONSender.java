@@ -4,8 +4,8 @@
  * Course: IST 242
  * Author: Abdullah Koro
  * Date Developed: 6/3/24
- * Last Date Changed: 6/10/24
- * Revision: 2
+ * Last Date Changed: 6/16/24
+ * Revision: 3
  */
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,37 +13,58 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GameAJSONSender
+/**
+ * Sends a GameObject as JSON data via HTTP POST to a specified URL
+ *
+ */
+public class GameAJSONSender {
 
-{
-    public static void main(String[] args)
-
-    {
+    /**
+     * Main method to send a GameObject as JSON data via HTTP POST
+     *
+     */
+    public static void main(String[] args) {
         try {
-            URL url = new URL("http://localhost:8080/receiveGameObject");
+            // Specify the URL where the JSON data will be sent
+
+            URL url = new URL("http://localhost:8080/receiveGameObject"); // Adjust URL as necessary
+
+            // Open a connection to the specified URL
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            conn.setDoOutput(true);
-
+            conn.setDoOutput(true); // Set connection to allow output
             conn.setRequestMethod("POST");
+            // Use HTTP POST method
+            conn.setRequestProperty("Content-Type", "application/json"); // Set content type as JSON
 
-            conn.setRequestProperty("Content-Type", "application/json");
+            // Create a GameObject instance to be sent
+
+            GameObject gameObject = new GameObject("Player1", 100);
+
+            // Convert GameObject to JSON string
 
             ObjectMapper mapper = new ObjectMapper();
-            GameObject gameObject = new GameObject("Player1", 100); // Create a GameObject
             String jsonInputString = mapper.writeValueAsString(gameObject);
 
-            try (OutputStream os = conn.getOutputStream())
+            // Send JSON data to the server
 
+            try (OutputStream os = conn.getOutputStream())
             {
                 byte[] input = jsonInputString.getBytes("utf-8");
                 os.write(input, 0, input.length);
             }
 
+            // Get the HTTP response code
+
             int responseCode = conn.getResponseCode();
             System.out.println("POST Response Code :: " + responseCode);
-        } catch (Exception e)
+
+            // Disconnect the connection after use
+
+            conn.disconnect();
+        }
+
+        catch (Exception e)
         {
             e.printStackTrace();
         }

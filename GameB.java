@@ -4,45 +4,59 @@
  * Course: IST 242
  * Author: Abdullah Koro
  * Date Developed: 6/3/24
- * Last Date Changed: 6/9/24
- * Revision: 1
+ * Last Date Changed: 6/16/24
+ * Revision: 2
  */
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.DeliverCallback;
+import com.rabbitmq.client.*;
 
-public class GameB {
-    /** The name of the queue for receiving game data */
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+/**
+ * Represents a consumer application that receives GameObject messages from a RabbitMQ queue
+ */
+public class GameB
+
+{
+
+    /**
+     * The name of the RabbitMQ queue to consume messages from
+     */
+
     private final static String QUEUE_NAME = "gameQueue";
 
     /**
-     * Main method to execute the GameB application
+     * Main method to consume GameObject messages from RabbitMQ queue
      *
-     * @throws Exception If an error occurs during RabbitMQ communication
      */
-    public static void main(String[] args) throws Exception {
-        // Create a connection factory
+    public static void main(String[] args) throws Exception
+
+    {
         ConnectionFactory factory = new ConnectionFactory();
+
         factory.setHost("localhost");
 
-        // Establish connection and channel to RabbitMQ server
         try (Connection connection = factory.newConnection();
+
              Channel channel = connection.createChannel()) {
-
-            // Declare the queue
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-
             System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
-            // Callback function to handle incoming messages
-            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+            // Callback to handle incoming messages
+            DeliverCallback deliverCallback = (consumerTag, delivery) ->
+            {
                 String message = new String(delivery.getBody(), "UTF-8");
-                System.out.println(" [x] Received '" + message + "'");
+                System.out.println(" [x] Received: '" + message + "'"); // Debug statement
+
+                // Convert JSON message to GameObject
+                ObjectMapper mapper = new ObjectMapper();
+
+                GameObject gameObject = mapper.readValue(message, GameObject.class);
+
+                System.out.println("GameObject: " + gameObject.getName() + ", " + gameObject.getScore());
             };
 
-            // Start consuming messages from the queue
-            channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {});
+            // Consume messages from the queue
+            channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
         }
     }
 }

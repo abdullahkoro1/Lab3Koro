@@ -4,35 +4,27 @@
  * Course: IST 242
  * Author: Abdullah Koro
  * Date Developed: 6/3/24
- * Last Date Changed: 6/9/24
- * Revision: 1
+ * Last Date Changed: 6/16/24
+ * Revision: 2
  */
 
 /**
  * Represents GameObject Class
  */
-
-public class GameObject
-
-{
-
+public class GameObject {
     private String name;
     private int score;
 
-    // No-argument constructor
-
     public GameObject() {
-        // Default constructor
+        // Default constructor needed for JSON serialization
     }
 
-    // Constructor with parameters
-    public GameObject(String name, int score)
-    {
+    public GameObject(String name, int score) {
         this.name = name;
         this.score = score;
     }
 
-    // Getter and setter methods for 'name'
+    // Getters and setters (optional, but recommended for encapsulation)
     public String getName() {
         return name;
     }
@@ -41,14 +33,19 @@ public class GameObject
         this.name = name;
     }
 
-    // Getter and setter methods for 'score'
     public int getScore() {
         return score;
     }
 
-    public void setScore(int score)
-
-    {
+    public void setScore(int score) {
         this.score = score;
+    }
+
+    @Override
+    public String toString() {
+        return "GameObject{" +
+                "name='" + name + '\'' +
+                ", score=" + score +
+                '}';
     }
 }
