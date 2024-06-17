@@ -11,38 +11,49 @@
 /**
  * Represents GameObject Class
  */
-public class GameObject {
+public class GameObject
+{
     private String name;
     private int score;
 
-    public GameObject() {
+    public GameObject()
+    {
         // Default constructor needed for JSON serialization
     }
 
-    public GameObject(String name, int score) {
+    public GameObject(String name, int score)
+    {
         this.name = name;
         this.score = score;
     }
 
-    // Getters and setters (optional, but recommended for encapsulation)
-    public String getName() {
+    // Getters and setters
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+
+    {
         this.name = name;
     }
 
-    public int getScore() {
+    public int getScore()
+
+    {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(int score)
+
+    {
         this.score = score;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "GameObject{" +
                 "name='" + name + '\'' +
                 ", score=" + score +

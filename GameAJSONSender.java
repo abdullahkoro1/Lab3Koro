@@ -17,7 +17,8 @@ import java.net.URL;
  * Sends a GameObject as JSON data via HTTP POST to a specified URL
  *
  */
-public class GameAJSONSender {
+public class GameAJSONSender
+{
 
     /**
      * Main method to send a GameObject as JSON data via HTTP POST
@@ -25,16 +26,16 @@ public class GameAJSONSender {
      */
     public static void main(String[] args) {
         try {
-            // Specify the URL where the JSON data will be sent
 
-            URL url = new URL("http://localhost:8080/receiveGameObject"); // Adjust URL as necessary
+            URL url = new URL("http://localhost:8080/receiveGameObject"); // URL
 
-            // Open a connection to the specified URL
+            // Opening aa connection to the URL
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true); // Set connection to allow output
             conn.setRequestMethod("POST");
-            // Use HTTP POST method
+
+            // Using the HTTP POST method
             conn.setRequestProperty("Content-Type", "application/json"); // Set content type as JSON
 
             // Create a GameObject instance to be sent

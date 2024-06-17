@@ -34,7 +34,7 @@ public class GameA
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
 
-        // Try-with-resources block ensures resources are closed properly
+        // Try-with-resources block
 
 
 
