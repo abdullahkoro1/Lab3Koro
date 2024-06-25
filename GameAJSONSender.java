@@ -4,8 +4,8 @@
  * Course: IST 242
  * Author: Abdullah Koro
  * Date Developed: 6/3/24
- * Last Date Changed: 6/16/24
- * Revision: 3
+ * Last Date Changed: 6/26/24
+ * Revision: 4
  */
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,18 +24,17 @@ public class GameAJSONSender
      * Main method to send a GameObject as JSON data via HTTP POST
      *
      */
-    public static void main(String[] args) {
-        try {
-
+    public static void main(String[] args)
+    {
+        try
+        {
             URL url = new URL("http://localhost:8080/receiveGameObject"); // URL
 
-            // Opening aa connection to the URL
-
+            // Opening a connection to the URL
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true); // Set connection to allow output
-            conn.setRequestMethod("POST");
 
-            // Using the HTTP POST method
+            conn.setRequestMethod("POST"); // Using the HTTP POST method
             conn.setRequestProperty("Content-Type", "application/json"); // Set content type as JSON
 
             // Create a GameObject instance to be sent
@@ -47,8 +46,10 @@ public class GameAJSONSender
             ObjectMapper mapper = new ObjectMapper();
             String jsonInputString = mapper.writeValueAsString(gameObject);
 
-            // Send JSON data to the server
+            // Log the JSON string being sent
+            System.out.println("Sending JSON: " + jsonInputString);
 
+            // Send JSON data to the server
             try (OutputStream os = conn.getOutputStream())
             {
                 byte[] input = jsonInputString.getBytes("utf-8");
@@ -56,15 +57,20 @@ public class GameAJSONSender
             }
 
             // Get the HTTP response code
-
             int responseCode = conn.getResponseCode();
             System.out.println("POST Response Code :: " + responseCode);
 
-            // Disconnect the connection after use
+            // Get response message
+            if (responseCode == HttpURLConnection.HTTP_OK)
+            { // success
+                System.out.println("POST was successful");
+            } else {
+                System.out.println("POST request did not work");
+            }
 
+            // Disconnect the connection after use
             conn.disconnect();
         }
-
         catch (Exception e)
         {
             e.printStackTrace();
