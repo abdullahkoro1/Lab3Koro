@@ -24,7 +24,7 @@ public class GameAJSONSender {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("GET");
-            conn.setRequestProperty("Content-Type", "application/json"); // Set content type as JSON
+            conn.setRequestProperty("Content-Type", "application/json");
 
 
             GameObject gameObject = new GameObject("Player1", 100);

@@ -55,7 +55,7 @@ public class GameBJSONReceiver {
                 os.write(response.getBytes());
                 os.close();
             } else {
-                exchange.sendResponseHeaders(405, -1); // Method Not Allowed
+                exchange.sendResponseHeaders(405, -1);
             }
         }
     }
