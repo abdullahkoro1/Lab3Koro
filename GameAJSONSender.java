@@ -5,7 +5,7 @@
  * Author: Abdullah Koro
  * Date Developed: 6/3/24
  * Last Date Changed: 6/26/24
- * Revision: 4
+ * Revision: 5
  */
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,66 +13,48 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Sends a GameObject as JSON data via HTTP POST to a specified URL
- *
- */
-public class GameAJSONSender
-{
 
-    /**
-     * Main method to send a GameObject as JSON data via HTTP POST
-     *
-     */
-    public static void main(String[] args)
-    {
-        try
-        {
-            URL url = new URL("http://localhost:8080/receiveGameObject"); // URL
+public class GameAJSONSender {
 
-            // Opening a connection to the URL
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("http://localhost:8000/receiveGameObject"); // Specify the URL of the web service
+
+            // Open a connection to the URL
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true); // Set connection to allow output
-
-            conn.setRequestMethod("POST"); // Using the HTTP POST method
+            conn.setDoOutput(true);
+            conn.setRequestMethod("GET");
             conn.setRequestProperty("Content-Type", "application/json"); // Set content type as JSON
 
-            // Create a GameObject instance to be sent
 
             GameObject gameObject = new GameObject("Player1", 100);
 
-            // Convert GameObject to JSON string
 
             ObjectMapper mapper = new ObjectMapper();
             String jsonInputString = mapper.writeValueAsString(gameObject);
 
             // Log the JSON string being sent
-            System.out.println("Sending JSON: " + jsonInputString);
+            System.out.println("Sent " + jsonInputString);
 
             // Send JSON data to the server
-            try (OutputStream os = conn.getOutputStream())
-            {
+            try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes("utf-8");
                 os.write(input, 0, input.length);
             }
 
-            // Get the HTTP response code
             int responseCode = conn.getResponseCode();
-            System.out.println("POST Response Code :: " + responseCode);
+            System.out.println();
 
-            // Get response message
-            if (responseCode == HttpURLConnection.HTTP_OK)
-            { // success
-                System.out.println("POST was successful");
+            // Print the response
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                System.out.println("");
             } else {
-                System.out.println("POST request did not work");
+                System.out.println("");
             }
 
-            // Disconnect the connection after use
+            // Parse the JSON response as needed
             conn.disconnect();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
